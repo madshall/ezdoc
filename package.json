@@ -1,0 +1,27 @@
+{
+  "name": "ezdoc",
+  "version": "1.0.0",
+  "preferGlobal": true,
+  "description": "Generator and browser for node.js packages and static markdown files",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "ezdoc": "./start.js"
+  },
+  "keywords": [
+    "docs",
+    "documentation",
+    "package",
+    "browser"
+  ],
+  "author": "Dmitry Ivanov <madshall.dev@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "command-line-args": "^5.0.2",
+    "express": "^4.16.3",
+    "nodemon": "^1.17.2",
+    "request": "2.85.0",
+    "validate-npm-package-name": "3.0.0"
+  }
+}

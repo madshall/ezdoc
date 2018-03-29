@@ -1,0 +1,51 @@
+{
+  "sections": [
+    {
+      "title": "Tutorial",
+      "resource": "./tutorial.md",
+      "children": [
+        {
+          "title": "Step 1",
+          "resource": "./step1.md"
+        },
+        {
+          "title": "Step 2",
+          "resource": "./step2.md"
+        },
+        {
+          "title": "Step 3",
+          "resource": "./step3.md"
+        }
+      ]
+    },
+    {
+      "title": "API",
+      "children": [
+        {
+          "title": "Lodash",
+          "resource": "lodash"
+        },
+        {
+          "title": "React",
+          "resource": "react"
+        },
+        {
+          "title": "Redux",
+          "resource": "redux"
+        }
+      ]
+    },
+    {
+      "title": "About EZDoc",
+      "resource": "https://raw.githubusercontent.com/npm/ezdoc/master/README.md"
+    },
+    {
+      "title": "Other",
+      "resource": "./creds.md"
+    },
+    {
+      "title": "Google",
+      "link": "https://google.com"
+    }
+  ]
+}
