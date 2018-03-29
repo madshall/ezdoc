@@ -23,5 +23,9 @@
     "nodemon": "^1.17.2",
     "request": "2.85.0",
     "validate-npm-package-name": "3.0.0"
-  }
+  },
+  "engines": {
+    "node" : ">=8.7.0"
+  },
+  "engineStrict" : true
 }
