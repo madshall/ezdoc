@@ -1,8 +1,11 @@
 {
+  "title": "EZDoc example",
+  "icon": "TODO",
   "sections": [
     {
       "title": "Tutorial",
       "resource": "./tutorial.md",
+      "default": true,
       "children": [
         {
           "title": "Step 1",
@@ -30,8 +33,8 @@
           "resource": "react"
         },
         {
-          "title": "Redux",
-          "resource": "redux"
+          "title": "Request",
+          "resource": "request"
         }
       ]
     },

@@ -9,9 +9,15 @@ const appStarted = '\nEZDoc server has started';
 const appQuit = '\nEZDoc server has quit';
 const appRestarted = '\nEZDoc server restarted';
 
+const clientStarted = '\nEZDoc client has started';
+const clientQuit = '\nEZDoc client has quit';
+
+const startupError = '\nCan\'t start EZDoc';
+
+const node = process.argv[0];
+
 const args = commandLineArgs([
   {name: 'server-port', alias: 's', type: Number, defaultValue: 5001},
-  {name: 'client-port', alias: 'c', type: Number, defaultValue: 5000},
   {name: 'config', type: String, defaultOption: true},
   {name: 'development', alias: 'd', type: Boolean, defaultOption: false}
 ]);
@@ -32,55 +38,101 @@ if (!args.config) {
 }
 
 const serverPath = path.resolve(__dirname, "./lib/server/index.js");
+const clientPath = path.resolve(__dirname, "./lib/app/");
 
-const spawnDev = () => {
+const spawnServerDev = () => {
   console.log('Starting EZDoc in dev mode...');
-  nodemon({
-    script: serverPath,
-    env: {
-      PORT: args['server-port'],
-      CONFIG: configPath
-    }
-  });
+  return new Promise((resolve, reject) => {
+    nodemon({
+      script: serverPath,
+      env: {
+        PORT: args['server-port'],
+        CONFIG: configPath,
+        DEV_MODE: args.development
+      }
+    });
 
-  nodemon.on('start', function () {
-    console.log(appStarted);
-  }).on('quit', function () {
-    process.exit();
-  }).on('restart', function (files) {
-    console.log(appRestarted);
+    nodemon.on('start', () => {
+      console.log(appStarted);
+      resolve();
+    }).on('quit', () => {
+      process.exit();
+    }).on('restart', (files) => {
+      console.log(appRestarted);
+    }).on('crash', () => {
+      reject();
+    })
   });
 };
 
-const spawnProd = () => {
+const spawnServerProd = () => {
   console.log('Starting EZDoc...');
-  const server = spawn('node', [serverPath], {
-    env: {
-      PORT: args['server-port'],
-      CONFIG: configPath
-    }
-  });
+  return new Promise((resolve, reject) => {
+    const server = spawn('node', [serverPath], {
+      env: {
+        PORT: args['server-port'],
+        CONFIG: configPath
+      }
+    });
 
-  server.stdout.on('data', function(data) {
-    console.log(appStarted);
-    console.log(data.toString());
-  });
+    server.stdout.on('data', (data) => {
+      console.log(appStarted);
+      console.log(data.toString());
+      resolve();
+    });
 
-  server.stderr.on('data', function(data) {
-    console.error(data.toString());
-  });
+    server.stderr.on('data', (data) => {
+      console.error(data.toString());
+      reject();
+    });
 
-  server.on('exit', function() {
-    process.exit();
+    server.on('exit', () => {
+      process.exit();
+    });
+  });
+};
+
+const spawnClientDev = () => {
+  const config = require(configPath);
+  return new Promise((resolve, reject) => {
+    const client = spawn(node, [path.resolve(__dirname, './node_modules/react-scripts/scripts/start.js')], {
+      cwd: clientPath,
+      env: {
+        REACT_APP_PROXY_PORT: args['server-port'],
+        REACT_APP_TITLE: config.title
+      }
+    });
+
+    client.stdout.on('data', (data) => {
+      console.log(data.toString());
+      resolve();
+    });
+
+    client.stderr.on('data', (data) => {
+      console.error(data.toString());
+      reject();
+    });
+
+    client.on('exit', () => {
+      process.exit();
+    });
   });
 };
 
 if (args.development === true) {
-  spawnDev();
+  spawnServerDev()
+    .then(spawnClientDev)
+    .catch(() => {
+      console.error(startupError);
+    });
 } else {
-  spawnProd();
+  spawnServerProd()
+    .catch(() => {
+      console.error(startupError);
+    });
 }
 
 process.on('exit', function() {
   console.log(appQuit);
+  console.log(clientQuit);
 });

@@ -4,7 +4,8 @@
   "preferGlobal": true,
   "description": "Generator and browser for node.js packages and static markdown files",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepublish": "cd ./lib/app && react-scripts build"
   },
   "bin": {
     "ezdoc": "./start.js"
@@ -20,12 +21,22 @@
   "dependencies": {
     "command-line-args": "^5.0.2",
     "express": "^4.16.3",
+    "flexbox-react": "^4.4.0",
+    "github-markdown-css": "^2.10.0",
+    "lodash": "^4.17.5",
+    "markdown-it": "^8.4.1",
+    "markdown-react-js": "^1.0.0",
+    "material-ui": "^0.20.0",
     "nodemon": "^1.17.2",
+    "prop-types": "^15.6.1",
+    "react": "^16.3.0",
+    "react-dom": "^16.3.0",
+    "react-scripts": "1.1.2",
     "request": "2.85.0",
     "validate-npm-package-name": "3.0.0"
   },
   "engines": {
-    "node" : ">=8.7.0"
+    "node": ">=8.7.0"
   },
-  "engineStrict" : true
+  "engineStrict": true
 }
